@@ -1,3 +1,5 @@
+import { shopNames } from '../constants/constants.js'
+
 export class PlacesDataFactory {
   constructor({
     count = 100,
@@ -23,29 +25,6 @@ export class PlacesDataFactory {
     };
   }
 
-  shopNames = [
-    "Apple Store",
-    "Starbucks",
-    "Zara",
-    "H&M",
-    "Nike",
-    "Adidas",
-    "Uniqlo",
-    "Food Court",
-    "Samsung",
-    "IKEA",
-    "Lego Store",
-    "Sephora",
-    "McDonald's",
-    "KFC",
-    "Subway",
-    "Burger King",
-    "Puma",
-    "Sony",
-    "Microsoft",
-    "Google Store"
-  ];
-
   getRandomFromArray(arr) {
     return arr[Math.floor(this.random() * arr.length)];
   }
@@ -65,7 +44,7 @@ export class PlacesDataFactory {
     return Array.from({ length: this.count }, (_, i) => {
       return {
         id: `shop_${String(i + 1).padStart(3, "0")}`,
-        name: this.getRandomFromArray(this.shopNames),
+        name: this.getRandomFromArray(shopNames),
         width: this.getRandomSize(),
         depth: this.getRandomSize(),
         color: this.getRandomColor()
