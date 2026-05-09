@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { SCENE_WIDTH } from '../constants/constants.js'
 
 export class Camera {
   constructor() {
@@ -6,10 +7,10 @@ export class Camera {
       75,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      1000,
     );
 
-    this.camera.position.z = 5;
+    this.camera.position.set(SCENE_WIDTH/2, SCENE_WIDTH, SCENE_WIDTH);
   }
 
   get() {

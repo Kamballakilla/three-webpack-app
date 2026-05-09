@@ -1,0 +1,1 @@
+export const SCENE_WIDTH = 120
