@@ -43,6 +43,27 @@ export class Shop {
     this.mesh.add(this.label.get());
   }
 
+  update(camera) {
+    const distance = camera.position.distanceTo(this.mesh.position);
+
+    const labelObj = this.label.get();
+    const el = this.label.element;
+
+    const maxDistance = 30;
+    const minDistance = 20;
+
+    let opacity = 1;
+
+    if (distance > maxDistance) {
+      opacity = 0;
+    } else if (distance > minDistance) {
+      opacity = 1 - (distance - minDistance) / (maxDistance - minDistance);
+    }
+
+    labelObj.visible = opacity > 0;
+    el.style.opacity = opacity;
+  }
+
   get() {
     return this.mesh;
   }

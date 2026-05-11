@@ -16,5 +16,7 @@
   user-select: none;
   pointer-events: none;
 
+  transition: opacity 0.15s ease;
+
   transform: translate(-50%, -50%);
 }

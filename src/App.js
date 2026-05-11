@@ -28,8 +28,8 @@ export class App {
 
     // SHOPS
     this.places = new PlacesBuilder();
-    const shops = this.places.build(gridLayoutTwoPointer);
-    shops.forEach((shop) => {
+    this.shops = this.places.build(gridLayoutTwoPointer);
+    this.shops.forEach((shop) => {
       this.scene.get().add(shop.get());
     });
 
@@ -45,10 +45,20 @@ export class App {
     });
   }
 
+  update() {
+    this.controls.update();
+
+    const camera = this.camera.get();
+
+    this.shops.forEach((shop) => {
+      shop.update(camera);
+    });
+  }
+
   animate = () => {
     requestAnimationFrame(this.animate);
 
-    this.controls.update();
+    this.update();
 
     this.renderer.render(this.scene.get(), this.camera.get());
 
