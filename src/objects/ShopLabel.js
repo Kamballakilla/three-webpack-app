@@ -2,8 +2,9 @@ import * as THREE from 'three';
 import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
 export class ShopLabel {
-  constructor(text) {
+  constructor(text, height = 0) {
     this.text = text;
+    this.height = height;
 
     this.element = this.createElement();
     this.label = this.createLabel();
@@ -21,7 +22,8 @@ export class ShopLabel {
   createLabel() {
     const label = new CSS2DObject(this.element);
 
-    label.position.set(0, 2.2, 0);
+    const offset = 0.1;
+    label.position.set(0, this.height / 2 + offset, 0);
 
     return label;
   }

@@ -39,7 +39,7 @@ export class Shop {
       depth: this.data.depth,
     };
 
-    this.label = new ShopLabel(this.data.name);
+    this.label = new ShopLabel(this.data.name, this.height);
     this.mesh.add(this.label.get());
   }
 
