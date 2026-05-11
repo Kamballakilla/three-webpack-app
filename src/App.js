@@ -1,6 +1,7 @@
 import { Scene } from "./core/Scene.js";
 import { Camera } from "./core/Camera.js";
 import { Renderer } from "./core/Renderer.js";
+import { LabelRenderer } from "./core/LabelRenderer.js";
 
 import { Controls } from "./controls/Controls.js";
 
@@ -17,6 +18,8 @@ export class App {
     this.camera = new Camera();
 
     this.renderer = new Renderer();
+
+    this.labelRenderer = new LabelRenderer();
 
     this.controls = new Controls(this.camera.get(), this.renderer.get());
 
@@ -38,6 +41,7 @@ export class App {
     window.addEventListener("resize", () => {
       this.camera.resize();
       this.renderer.resize();
+      this.labelRenderer.resize();
     });
   }
 
@@ -46,6 +50,8 @@ export class App {
 
     this.controls.update();
 
-    this.renderer.get().render(this.scene.get(), this.camera.get());
+    this.renderer.render(this.scene.get(), this.camera.get());
+
+    this.labelRenderer.render(this.scene.get(), this.camera.get());
   };
 }
