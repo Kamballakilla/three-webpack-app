@@ -43,6 +43,15 @@ export class App {
       this.renderer.resize();
       this.labelRenderer.resize();
     });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.code === "Space") {
+        const next = this.camera.getMode() === "3d" ? "2d" : "3d";
+
+        this.camera.setMode(next);
+        this.controls.setMode(next, this.camera.get());
+      }
+    });
   }
 
   update() {
