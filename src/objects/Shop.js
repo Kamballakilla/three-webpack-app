@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { ShopLabel } from "./ShopLabel.js";
 
 export class Shop {
   constructor(data) {
@@ -13,11 +14,11 @@ export class Shop {
     const geometry = new THREE.BoxGeometry(
       this.data.width,
       this.height,
-      this.data.depth
+      this.data.depth,
     );
 
     const material = new THREE.MeshStandardMaterial({
-      color: this.data.color
+      color: this.data.color,
     });
 
     this.mesh = new THREE.Mesh(geometry, material);
@@ -25,7 +26,7 @@ export class Shop {
     this.mesh.position.set(
       this.data.position.x,
       this.height / 2,
-      this.data.position.z
+      this.data.position.z,
     );
 
     this.mesh.castShadow = true;
@@ -35,8 +36,11 @@ export class Shop {
       id: this.data.id,
       name: this.data.name,
       width: this.data.width,
-      depth: this.data.depth
+      depth: this.data.depth,
     };
+
+    this.label = new ShopLabel(this.data.name);
+    this.mesh.add(this.label.get());
   }
 
   get() {
