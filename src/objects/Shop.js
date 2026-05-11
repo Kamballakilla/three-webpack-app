@@ -49,8 +49,8 @@ export class Shop {
     const labelObj = this.label.get();
     const el = this.label.element;
 
-    const maxDistance = 30;
-    const minDistance = 20;
+    const maxDistance = 40;
+    const minDistance = 30;
 
     let opacity = 1;
 
