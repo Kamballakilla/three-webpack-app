@@ -11,17 +11,16 @@ export class Controls {
   setMode(mode, camera) {
     const centerX = SCENE_WIDTH / 2;
     const centerZ = SCENE_WIDTH / 4;
+
     this.controls.object = camera;
+    this.controls.target.set(centerX, 0, centerZ);
 
     if (mode === "2d") {
-      this.controls.target.set(centerX, 0, centerZ);
       this.controls.enableRotate = false;
       this.controls.enablePan = false;
-      this.controls.enableZoom = true;
     } else {
       this.controls.enableRotate = true;
       this.controls.enablePan = true;
-      this.controls.enableZoom = true;
     }
 
     this.controls.update();

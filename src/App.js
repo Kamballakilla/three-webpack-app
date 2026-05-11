@@ -1,3 +1,5 @@
+import * as THREE from "three";
+
 import { Scene } from "./core/Scene.js";
 import { Camera } from "./core/Camera.js";
 import { Renderer } from "./core/Renderer.js";
@@ -20,6 +22,8 @@ export class App {
     this.renderer = new Renderer();
 
     this.labelRenderer = new LabelRenderer();
+
+    this.clock = new THREE.Clock();
 
     this.controls = new Controls(this.camera.get(), this.renderer.get());
 
@@ -53,8 +57,11 @@ export class App {
       }
     });
   }
-
   update() {
+    const delta = this.clock.getDelta();
+
+    this.camera.update(delta);
+
     this.controls.update();
 
     const camera = this.camera.get();
@@ -63,7 +70,6 @@ export class App {
       shop.update(camera);
     });
   }
-
   animate = () => {
     requestAnimationFrame(this.animate);
 
