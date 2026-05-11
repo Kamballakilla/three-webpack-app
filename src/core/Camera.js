@@ -12,7 +12,6 @@ export class Camera {
 
     // 2D камера
     this.orthographic = this.createOrthoCamera();
-
     this.active = this.perspective;
 
     // параметры анимации
@@ -22,6 +21,12 @@ export class Camera {
 
     this.startPosition = new THREE.Vector3();
     this.targetPosition = new THREE.Vector3();
+
+    this.startQuaternion = new THREE.Quaternion();
+    this.targetQuaternion = new THREE.Quaternion();
+
+    // this.startFov = 75;
+    // this.targetFov = 75;
 
     this.startLookAt = new THREE.Vector3();
     this.targetLookAt = new THREE.Vector3();
@@ -50,22 +55,38 @@ export class Camera {
 
     this.mode = mode;
 
+    // стартовые значения
     this.startPosition.copy(this.active.position);
     this.startLookAt.copy(this.currentLookAt);
+    this.startQuaternion.copy(this.active.quaternion);
+
+    this.active = this.perspective;
 
     if (mode === "2d") {
-      // сначала анимируем perspective
-      this.active = this.perspective;
+      this.targetPosition.set(centerX, SCENE_WIDTH / 2, centerZ + 5);
 
-      this.targetPosition.set(centerX, SCENE_WIDTH / 2, centerZ + 0.01);
       this.targetLookAt.set(centerX, 0, centerZ);
-    } else {
-      this.active = this.perspective;
 
+      // this.startFov = this.perspective.fov;
+      // this.targetFov = 75;
+    } else {
       this.targetPosition.set(SCENE_WIDTH / 2, SCENE_WIDTH, SCENE_WIDTH);
 
       this.targetLookAt.set(centerX, 0, centerZ);
+
+      // this.startFov = this.perspective.fov;
+      // this.targetFov = 75;
     }
+
+    // TARGET ROTATION
+    const tempCamera = this.perspective.clone();
+
+    tempCamera.position.copy(this.targetPosition);
+
+    // важно для top-view
+    tempCamera.up.set(0, 0, -1);
+    tempCamera.lookAt(this.targetLookAt);
+    this.targetQuaternion.copy(tempCamera.quaternion);
 
     this.animationProgress = 0;
     this.isAnimating = true;
@@ -87,13 +108,21 @@ export class Camera {
       eased,
     );
 
-    this.currentLookAt.lerpVectors(
-      this.startLookAt,
-      this.targetLookAt,
+    this.active.quaternion.slerpQuaternions(
+      this.startQuaternion,
+      this.targetQuaternion,
       eased,
     );
 
-    this.active.lookAt(this.currentLookAt);
+    // this.perspective.fov = THREE.MathUtils.lerp(
+    //   this.startFov,
+    //   this.targetFov,
+    //   eased,
+    // );
+
+    this.perspective.updateProjectionMatrix();
+
+    this.currentLookAt.lerpVectors(this.startLookAt, this.targetLookAt, eased);
 
     if (t >= 1) {
       this.isAnimating = false;
@@ -101,14 +130,30 @@ export class Camera {
       // переключаемся на ortho
       if (this.mode === "2d") {
         this.orthographic.position.copy(this.active.position);
-        this.orthographic.lookAt(this.currentLookAt);
 
+        // копируем rotation напрямую
+        this.orthographic.quaternion.copy(this.active.quaternion);
+
+        // одинаковый up vector
+        this.orthographic.up.copy(this.active.up);
+
+        this.orthographic.updateProjectionMatrix();
+
+        // const distance = this.active.position.distanceTo(this.currentLookAt);
+
+        // const vFov = THREE.MathUtils.degToRad(this.perspective.fov);
+
+        // const visibleHeight = 2 * Math.tan(vFov / 2) * distance;
+
+        // this.orthographic.zoom = this.frustumSize / visibleHeight;
+
+        // this.orthographic.updateProjectionMatrix();
+
+        // переключение
         this.active = this.orthographic;
       }
     }
   }
-
-
 
   getMode() {
     return this.active === this.perspective ? "3d" : "2d";
