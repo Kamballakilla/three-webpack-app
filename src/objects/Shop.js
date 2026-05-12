@@ -49,6 +49,13 @@ export class Shop {
     const labelObj = this.label.get();
     const el = this.label.element;
 
+    if (camera.isOrthographicCamera) {
+      labelObj.visible = true;
+      el.style.opacity = 1;
+
+      return;
+    }
+
     const maxDistance = 40;
     const minDistance = 30;
 
