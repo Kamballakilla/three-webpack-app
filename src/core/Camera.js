@@ -25,9 +25,6 @@ export class Camera {
     this.startQuaternion = new THREE.Quaternion();
     this.targetQuaternion = new THREE.Quaternion();
 
-    // this.startFov = 75;
-    // this.targetFov = 75;
-
     this.startLookAt = new THREE.Vector3();
     this.targetLookAt = new THREE.Vector3();
 
@@ -63,27 +60,22 @@ export class Camera {
     this.active = this.perspective;
 
     if (mode === "2d") {
-      this.targetPosition.set(centerX, SCENE_WIDTH / 2, centerZ + 5);
+      this.targetPosition.set(centerX, SCENE_WIDTH / 2, centerZ + 2);
 
       this.targetLookAt.set(centerX, 0, centerZ);
-
-      // this.startFov = this.perspective.fov;
-      // this.targetFov = 75;
+      const tempCamera = this.perspective.clone();
+      tempCamera.position.copy(this.targetPosition);
+      tempCamera.up.set(0, 0, 1);
+      tempCamera.lookAt(this.targetLookAt);
+      this.targetQuaternion.copy(tempCamera.quaternion);
     } else {
       this.targetPosition.set(SCENE_WIDTH / 2, SCENE_WIDTH, SCENE_WIDTH);
-
       this.targetLookAt.set(centerX, 0, centerZ);
-
-      // this.startFov = this.perspective.fov;
-      // this.targetFov = 75;
     }
 
-    // TARGET ROTATION
     const tempCamera = this.perspective.clone();
 
     tempCamera.position.copy(this.targetPosition);
-
-    // важно для top-view
     tempCamera.up.set(0, 0, -1);
     tempCamera.lookAt(this.targetLookAt);
     this.targetQuaternion.copy(tempCamera.quaternion);
@@ -114,14 +106,7 @@ export class Camera {
       eased,
     );
 
-    // this.perspective.fov = THREE.MathUtils.lerp(
-    //   this.startFov,
-    //   this.targetFov,
-    //   eased,
-    // );
-
     this.perspective.updateProjectionMatrix();
-
     this.currentLookAt.lerpVectors(this.startLookAt, this.targetLookAt, eased);
 
     if (t >= 1) {
@@ -139,15 +124,13 @@ export class Camera {
 
         this.orthographic.updateProjectionMatrix();
 
-        // const distance = this.active.position.distanceTo(this.currentLookAt);
+        const distance = this.active.position.distanceTo(this.currentLookAt);
+        const vFov = THREE.MathUtils.degToRad(this.perspective.fov);
+        const visibleHeight = 1.85 * Math.tan(vFov / 2) * distance;
 
-        // const vFov = THREE.MathUtils.degToRad(this.perspective.fov);
+        this.orthographic.zoom = this.frustumSize / visibleHeight;
 
-        // const visibleHeight = 2 * Math.tan(vFov / 2) * distance;
-
-        // this.orthographic.zoom = this.frustumSize / visibleHeight;
-
-        // this.orthographic.updateProjectionMatrix();
+        this.orthographic.updateProjectionMatrix();
 
         // переключение
         this.active = this.orthographic;
