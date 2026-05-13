@@ -7,6 +7,9 @@ module.exports = {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
     clean: true,
+
+    // для GitHub Pages:
+    publicPath: "/three-webpack-app/",
   },
   devServer: {
     static: "./dist",
