@@ -3,6 +3,8 @@ import * as THREE from "three";
 export class Scene {
   constructor() {
     this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color("#87CEEB");
+    this.scene.fog = new THREE.Fog("#87CEEB", 180, 400);
   }
 
   get() {
