@@ -7,6 +7,11 @@ export class Shop {
 
     this.height = 10;
 
+    this.defaultColor = new THREE.Color(data.color);
+    this.hoverColor = new THREE.Color("#ffd166");
+
+    this.isHovered = false;
+
     this.createMesh();
   }
 
@@ -17,11 +22,12 @@ export class Shop {
       this.data.depth,
     );
 
-    const material = new THREE.MeshStandardMaterial({
-      color: this.data.color,
+    this.material = new THREE.MeshStandardMaterial({
+      color: this.defaultColor.clone(),
+      emissive: 0x000000,
     });
 
-    this.mesh = new THREE.Mesh(geometry, material);
+    this.mesh = new THREE.Mesh(geometry, this.material);
 
     this.mesh.position.set(
       this.data.position.x,
@@ -37,10 +43,23 @@ export class Shop {
       name: this.data.name,
       width: this.data.width,
       depth: this.data.depth,
+      shop: this,
     };
 
     this.label = new ShopLabel(this.data.name, this.height);
     this.mesh.add(this.label.get());
+  }
+
+  setHover(state) {
+    if (this.isHovered === state) return;
+
+    this.isHovered = state;
+
+    if (state) {
+      this.material.emissive.setHex(0x444444);
+    } else {
+      this.material.emissive.setHex(0x000000);
+    }
   }
 
   update(camera) {
