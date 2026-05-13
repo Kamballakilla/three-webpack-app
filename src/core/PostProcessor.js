@@ -41,7 +41,7 @@ export class PostProcessor {
 
     this.composer.addPass(this.outlinePass);
 
-    // FXAA
+    // FXAA для рендеринг через composer
     this.fxaaPass = new ShaderPass(FXAAShader);
 
     this.updateFXAAResolution();
