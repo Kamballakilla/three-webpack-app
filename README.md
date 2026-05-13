@@ -53,8 +53,7 @@ npm run build
 
 InstancedMesh для кубов 
 1 draw call вместо 1000
-трансформации задаются через setMatrixAt
-
+трансформации задаются через setMatrixAt.
 Для label используется distance-based fading.
 
 ### Обработка кликов при оптимизации сцены
