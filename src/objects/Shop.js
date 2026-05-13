@@ -46,7 +46,7 @@ export class Shop {
       shop: this,
     };
 
-    this.label = new ShopLabel(this.data.name, this.height);
+    this.label = new ShopLabel(this.data.name, this.height, this.data.width);
     this.mesh.add(this.label.get());
   }
 

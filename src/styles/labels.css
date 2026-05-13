@@ -13,6 +13,10 @@
 
   white-space: nowrap;
 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+
   user-select: none;
   pointer-events: none;
 
