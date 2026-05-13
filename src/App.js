@@ -64,6 +64,30 @@ export class App {
       }
     };
 
+    this.interaction.onSelect = (object) => {
+      if (!object) {
+        this.postProcessor.setSelected([]);
+
+        return;
+      }
+
+      this.postProcessor.setSelected([object]);
+
+      const { id, name } = object.userData;
+
+      const position = object.position;
+
+      console.log({
+        id,
+        name,
+        position: {
+          x: position.x,
+          y: position.y,
+          z: position.z,
+        },
+      });
+    };
+
     this.bindEvents();
     this.animate();
   }
@@ -107,7 +131,7 @@ export class App {
     requestAnimationFrame(this.animate);
 
     this.update();
-    
+
     this.postProcessor.render();
 
     this.labelRenderer.render(this.scene.get(), this.camera.get());

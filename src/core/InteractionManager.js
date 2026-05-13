@@ -1,11 +1,7 @@
 import * as THREE from "three";
 
 export class InteractionManager {
-  constructor({
-    camera,
-    domElement,
-    objects = [],
-  }) {
+  constructor({ camera, domElement, objects = [] }) {
     this.camera = camera;
     this.domElement = domElement;
     this.objects = objects;
@@ -17,36 +13,28 @@ export class InteractionManager {
 
     this.onHover = null;
 
+    this.selectedObject = null;
+
+    this.onSelect = null;
+
     this.bindEvents();
   }
 
   bindEvents() {
-    this.domElement.addEventListener(
-      "pointermove",
-      this.handlePointerMove,
-    );
+    this.domElement.addEventListener("pointermove", this.handlePointerMove);
+    this.domElement.addEventListener("click", this.handleClick);
   }
 
   handlePointerMove = (event) => {
-    this.pointer.x =
-      (event.clientX / window.innerWidth) * 2 - 1;
+    this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
 
-    this.pointer.y =
-      -(event.clientY / window.innerHeight) * 2 + 1;
+    this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-    this.raycaster.setFromCamera(
-      this.pointer,
-      this.camera,
-    );
+    this.raycaster.setFromCamera(this.pointer, this.camera);
 
-    const intersections =
-      this.raycaster.intersectObjects(
-        this.objects,
-        false,
-      );
+    const intersections = this.raycaster.intersectObjects(this.objects, false);
 
-    const object =
-      intersections[0]?.object || null;
+    const object = intersections[0]?.object || null;
 
     if (this.hoveredObject === object) return;
 
@@ -62,14 +50,20 @@ export class InteractionManager {
     }
   };
 
+  handleClick = () => {
+    this.selectedObject = this.hoveredObject;
+
+    if (this.onSelect) {
+      this.onSelect(this.selectedObject);
+    }
+  };
+
   updateCamera(camera) {
     this.camera = camera;
   }
 
   dispose() {
-    this.domElement.removeEventListener(
-      "pointermove",
-      this.handlePointerMove,
-    );
+    this.domElement.removeEventListener("pointermove", this.handlePointerMove);
+    this.domElement.removeEventListener("click", this.handleClick);
   }
 }
